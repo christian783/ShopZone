@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/user-db
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+  messages:
+    basename: messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+
+server:
+  port: ${SERVER_PORT:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+shopzone:
+  jwt:
+    secret: ${JWT_SECRET:ThisIsADevOnlyJwtSecretKey_ChangeMe!}
+    issuer: shopzone-user
+    access-token-ttl: 15m
+    refresh-token-ttl: 7d
+    reset-token-ttl: 30m
+  bootstrap:
+    admin-email: admin@shopzone.dev
+    admin-password: Admin123!
+    admin-name: ShopZone Admin
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
