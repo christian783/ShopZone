@@ -1,0 +1,84 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - "http://localhost:3000"
+                  - "http://localhost:5173"
+                  - "http://localhost:8080"
+                  - "http://127.0.0.1:3000"
+                  - "http://127.0.0.1:5173"
+                  - "http://127.0.0.1:8080"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - PATCH
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders: "*"
+                allowCredentials: true
+          routes:
+            - id: auth
+              uri: ${USER_URI:http://localhost:8081}
+              predicates:
+                - Path=/api/auth/**
+            - id: users
+              uri: ${USER_URI:http://localhost:8081}
+              predicates:
+                - Path=/api/users/**
+            - id: roles
+              uri: ${USER_URI:http://localhost:8081}
+              predicates:
+                - Path=/api/roles/**
+            - id: privileges
+              uri: ${USER_URI:http://localhost:8081}
+              predicates:
+                - Path=/api/privileges/**
+            - id: audit
+              uri: ${USER_URI:http://localhost:8081}
+              predicates:
+                - Path=/api/audit/**
+            - id: products
+              uri: ${PRODUCT_URI:http://localhost:8082}
+              predicates:
+                - Path=/api/products/**
+            - id: carts
+              uri: ${CART_URI:http://localhost:8083}
+              predicates:
+                - Path=/api/carts/**
+            - id: inventory
+              uri: ${INVENTORY_URI:http://localhost:8084}
+              predicates:
+                - Path=/api/inventory/**
+            - id: orders
+              uri: ${ORDER_URI:http://localhost:8085}
+              predicates:
+                - Path=/api/orders/**
+            - id: payments
+              uri: ${PAYMENT_URI:http://localhost:8086}
+              predicates:
+                - Path=/api/payments/**
+            - id: notifications
+              uri: ${NOTIFICATION_URI:http://localhost:8087}
+              predicates:
+                - Path=/api/notifications/**
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
